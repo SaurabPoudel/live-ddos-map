@@ -1,69 +1,91 @@
-import Image from "next/image";
+"use client";
+
+import Analytics from "@/components/Analytics";
+import Sider from "@/components/Sider";
+import dynamic from "next/dynamic";
+
+const World = dynamic(
+  () => import("@/components/ui/globe").then((module) => module.World),
+  { ssr: false },
+);
+
+export const sampleArcs = [
+  {
+    order: 1,
+    startLat: 37.7749,
+    startLng: -122.4194, // San Francisco
+    endLat: 40.7128,
+    endLng: -74.006,    // New York
+    arcAlt: 0.1,
+    color: "#3b82f6",   // Blue
+  },
+  {
+    order: 2,
+    startLat: 40.7128,
+    startLng: -74.006,    // New York
+    endLat: 51.5074,
+    endLng: -0.1278,    // London
+    arcAlt: 0.3,
+    color: "#a855f7",   // Purple
+  },
+  {
+    order: 3,
+    startLat: 51.5074,
+    startLng: -0.1278,    // London
+    endLat: 35.6762,
+    endLng: 139.6503,   // Tokyo
+    arcAlt: 0.5,
+    color: "#ec4899",   // Pink
+  },
+  {
+    order: 4,
+    startLat: 35.6762,
+    startLng: 139.6503,   // Tokyo
+    endLat: 1.3521,
+    endLng: 103.8198,   // Singapore
+    arcAlt: 0.2,
+    color: "#10b981",   // Emerald Green
+  },
+  {
+    order: 5,
+    startLat: 1.3521,
+    startLng: 103.8198,   // Singapore
+    endLat: -33.8688,
+    endLng: 151.2093,   // Sydney
+    arcAlt: 0.3,
+    color: "#f59e0b",   // Amber
+  },
+  {
+    order: 6,
+    startLat: -33.8688,
+    startLng: 151.2093,   // Sydney
+    endLat: 37.7749,
+    endLng: -122.4194, // San Francisco
+    arcAlt: 0.4,
+    color: "#3b82f6",   // Blue
+  }
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="min-h-screen bg-black text-green-500 flex h-full border border-red-500 justify-between ">
+      <div className="absolute p-6  flex  justify-center">
+        <h1 className="text-2xl font-bold mr-4 p-2 text-red-500">Live DDOS Attack Visualizer 
+      </h1>       
+      <span className="flex border border-green-500 rounded-xl p-2 "> 
+        <span className="relative flex size-3 mt-1.5  justify-between">
+  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+  <span className="relative inline-flex size-3 rounded-full bg-green-500"></span>
+        </span>
+        <span className="ps-2">Live  </span>
+        </span>
+ </div>
+      <div className="flex-1 flex items-center justify-center relative h-screen border border-red-500">
+  <div className="w-full h-full border border-red-500">
+    <World globeConfig={{ pointSize: 3, pointLight: "#ffffff", globeColor: "blue" }} data={sampleArcs} />
+  </div>
+</div>
+      <Sider/>
+    </main>
   );
 }
