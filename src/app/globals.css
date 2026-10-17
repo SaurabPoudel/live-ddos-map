@@ -1,3 +1,27 @@
 @import "tailwindcss";
 
+.country-pairs-scrollbar {
+  scrollbar-color: rgb(71 85 105 / 75%) transparent;
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
+}
 
+.country-pairs-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.country-pairs-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.country-pairs-scrollbar::-webkit-scrollbar-thumb {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: rgb(71 85 105 / 75%);
+  background-clip: padding-box;
+}
+
+.country-pairs-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgb(34 211 238 / 75%);
+  background-clip: padding-box;
+}

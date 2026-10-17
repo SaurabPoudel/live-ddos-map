@@ -1,91 +1,121 @@
 "use client";
 
-import Analytics from "@/components/Analytics";
+import LiveGlobe from "@/components/live-globe";
 import Sider from "@/components/Sider";
-import dynamic from "next/dynamic";
-
-const World = dynamic(
-  () => import("@/components/ui/globe").then((module) => module.World),
-  { ssr: false },
-);
-
-export const sampleArcs = [
-  {
-    order: 1,
-    startLat: 37.7749,
-    startLng: -122.4194, // San Francisco
-    endLat: 40.7128,
-    endLng: -74.006,    // New York
-    arcAlt: 0.1,
-    color: "#3b82f6",   // Blue
-  },
-  {
-    order: 2,
-    startLat: 40.7128,
-    startLng: -74.006,    // New York
-    endLat: 51.5074,
-    endLng: -0.1278,    // London
-    arcAlt: 0.3,
-    color: "#a855f7",   // Purple
-  },
-  {
-    order: 3,
-    startLat: 51.5074,
-    startLng: -0.1278,    // London
-    endLat: 35.6762,
-    endLng: 139.6503,   // Tokyo
-    arcAlt: 0.5,
-    color: "#ec4899",   // Pink
-  },
-  {
-    order: 4,
-    startLat: 35.6762,
-    startLng: 139.6503,   // Tokyo
-    endLat: 1.3521,
-    endLng: 103.8198,   // Singapore
-    arcAlt: 0.2,
-    color: "#10b981",   // Emerald Green
-  },
-  {
-    order: 5,
-    startLat: 1.3521,
-    startLng: 103.8198,   // Singapore
-    endLat: -33.8688,
-    endLng: 151.2093,   // Sydney
-    arcAlt: 0.3,
-    color: "#f59e0b",   // Amber
-  },
-  {
-    order: 6,
-    startLat: -33.8688,
-    startLng: 151.2093,   // Sydney
-    endLat: 37.7749,
-    endLng: -122.4194, // San Francisco
-    arcAlt: 0.4,
-    color: "#3b82f6",   // Blue
-  }
-];
+import type { AttackLayer, AttackResponse } from "@/lib/attack-types";
+import { useCallback, useEffect, useState } from "react";
 
 export default function Home() {
+  const [limit, setLimit] = useState(10);
+  const [layer, setLayer] = useState<AttackLayer>("layer3");
+  const [data, setData] = useState<AttackResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  function handleLimitChange(nextLimit: number) {
+    setLoading(true);
+    setLimit(nextLimit);
+  }
+
+  function handleLayerChange(nextLayer: AttackLayer) {
+    setLoading(true);
+    setLayer(nextLayer);
+  }
+
+  const loadAttacks = useCallback(
+    async (signal?: AbortSignal) => {
+      try {
+        const response = await fetch(
+          `/api/attacks?limit=${limit}&layer=${layer}`,
+          {
+            cache: "no-store",
+            signal,
+          },
+        );
+
+        if (!response.ok) {
+          const result = await response.json();
+          throw new Error(result.error ?? "Could not load attack data");
+        }
+
+        const result: AttackResponse = await response.json();
+        setData(result);
+        setError("");
+      } catch (loadError) {
+        if (loadError instanceof Error && loadError.name === "AbortError") {
+          return;
+        }
+        setError(
+          loadError instanceof Error ? loadError.message : "Unknown error",
+        );
+      } finally {
+        if (!signal?.aborted) setLoading(false);
+      }
+    },
+    [layer, limit],
+  );
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const initialLoad = window.setTimeout(() => {
+      void loadAttacks(controller.signal);
+    }, 0);
+
+    const interval = window.setInterval(() => {
+      void loadAttacks(controller.signal);
+    }, 5 * 60 * 1000);
+
+    return () => {
+      controller.abort();
+      window.clearTimeout(initialLoad);
+      window.clearInterval(interval);
+    };
+  }, [loadAttacks]);
+
   return (
-    <main className="min-h-screen bg-black text-green-500 flex h-full border border-red-500 justify-between ">
-      <div className="absolute p-6  flex  justify-center">
-        <h1 className="text-2xl font-bold mr-4 p-2 text-red-500">Live DDOS Attack Visualizer 
-      </h1>       
-      <span className="flex border border-green-500 rounded-xl p-2 "> 
-        <span className="relative flex size-3 mt-1.5  justify-between">
-  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
-  <span className="relative inline-flex size-3 rounded-full bg-green-500"></span>
+    <main className="min-h-screen bg-[#050b14] text-slate-100">
+      <header className="flex min-h-20 items-center justify-between gap-4 border-b border-white/10 px-5 py-4 sm:px-8">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
+            Network observability
+          </p>
+          <h1 className="mt-1 text-lg font-semibold tracking-tight text-white sm:text-xl">
+            Live DDoS attack visualizer
+          </h1>
+        </div>
+        <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/[0.07] px-3 py-1.5 text-xs font-medium text-emerald-300">
+          <span className="relative flex size-2">
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+            <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
+          </span>
+          LIVE
         </span>
-        <span className="ps-2">Live  </span>
-        </span>
- </div>
-      <div className="flex-1 flex items-center justify-center relative h-screen border border-red-500">
-  <div className="w-full h-full border border-red-500">
-    <World globeConfig={{ pointSize: 3, pointLight: "#ffffff", globeColor: "blue" }} data={sampleArcs} />
-  </div>
-</div>
-      <Sider/>
+      </header>
+
+      <div className="flex min-h-[calc(100vh-80px)] flex-col lg:flex-row">
+        <section className="flex min-w-0 flex-1 flex-col items-center justify-center overflow-hidden px-4 py-6 sm:px-8 lg:px-10">
+          <div className="mb-2 w-full max-w-[760px]">
+            <p className="text-sm text-slate-400">
+              Global attack traffic · Cloudflare Radar ·{" "}
+              {layer === "layer3" ? "Layer 3" : "Layer 7"}
+            </p>
+          </div>
+          <LiveGlobe
+            arcs={data?.arcs ?? []}
+            loading={loading}
+            error={error}
+          />
+        </section>
+        <Sider
+          data={data}
+          loading={loading}
+          error={error}
+          limit={limit}
+          layer={layer}
+          onLimitChange={handleLimitChange}
+          onLayerChange={handleLayerChange}
+        />
+      </div>
     </main>
   );
 }
