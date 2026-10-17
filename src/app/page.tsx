@@ -73,8 +73,8 @@ export default function Home() {
   }, [loadAttacks]);
 
   return (
-    <main className="min-h-screen bg-[#050b14] text-slate-100">
-      <header className="flex min-h-20 items-center justify-between gap-4 border-b border-white/10 px-5 py-4 sm:px-8">
+    <main className="flex h-dvh flex-col overflow-hidden bg-[#050b14] text-slate-100">
+      <header className="flex h-20 shrink-0 items-center justify-between gap-4 border-b border-white/10 px-5 py-4 sm:px-8">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
             Network observability
@@ -92,9 +92,9 @@ export default function Home() {
         </span>
       </header>
 
-      <div className="flex min-h-[calc(100vh-80px)] flex-col lg:flex-row">
-        <section className="flex min-w-0 flex-1 flex-col items-center justify-center overflow-hidden px-4 py-6 sm:px-8 lg:px-10">
-          <div className="mb-2 w-full max-w-[760px]">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
+        <section className="flex min-h-0 min-w-0 flex-[0_0_38%] flex-col items-center overflow-hidden px-4 py-2 sm:px-8 lg:flex-1 lg:justify-center lg:px-10 lg:py-4">
+          <div className="w-full max-w-[760px] shrink-0">
             <p className="text-sm text-slate-400">
               Global attack traffic · Cloudflare Radar ·{" "}
               {layer === "layer3" ? "Layer 3" : "Layer 7"}

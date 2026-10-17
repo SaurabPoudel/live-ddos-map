@@ -40,8 +40,8 @@ export default function Sider({
   }
 
   return (
-    <aside className="flex w-full flex-col gap-6 border-t border-white/10 bg-slate-950/80 p-5 sm:p-6 lg:min-h-0 lg:w-[360px] lg:shrink-0 lg:border-l lg:border-t-0">
-      <section>
+    <aside className="flex min-h-0 w-full flex-[0_0_62%] flex-col gap-3 overflow-y-auto border-t border-white/10 bg-slate-950/80 p-4 sm:gap-4 sm:p-5 lg:w-[clamp(280px,24vw,340px)] lg:flex-none lg:gap-5 lg:overflow-hidden lg:border-l lg:border-t-0 lg:p-6">
+      <section className="shrink-0">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">
           Radar analytics
         </p>
@@ -53,7 +53,7 @@ export default function Sider({
         </p>
       </section>
 
-      <fieldset>
+      <fieldset className="shrink-0">
         <legend className="mb-2 text-sm font-medium text-slate-200">
           Traffic layer
         </legend>
@@ -76,7 +76,7 @@ export default function Sider({
         </div>
       </fieldset>
 
-      <label className="block">
+      <label className="block shrink-0">
         <span className="mb-2 flex items-center justify-between text-sm font-medium text-slate-200">
           Country pairs to show
           <span className="text-xs text-slate-500">Max 40</span>
@@ -93,7 +93,7 @@ export default function Sider({
         />
       </label>
 
-      <section className="grid grid-cols-2 gap-3">
+      <section className="grid shrink-0 grid-cols-2 gap-3">
         <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
           <p className="text-xs text-slate-400">Pairs returned</p>
           <p className="mt-2 text-2xl font-semibold tabular-nums text-white">
@@ -108,7 +108,7 @@ export default function Sider({
         </div>
       </section>
 
-      <section className="min-h-0 flex-1">
+      <section className="flex min-h-0 flex-1 flex-col">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="text-sm font-semibold text-white">
             Top country pairs
@@ -126,7 +126,7 @@ export default function Sider({
             {error}
           </p>
         ) : data?.attacks.length ? (
-          <ol className="country-pairs-scrollbar max-h-[50vh] divide-y divide-white/[0.07] overflow-y-auto lg:max-h-[calc(100vh-390px)]">
+          <ol className="country-pairs-scrollbar min-h-0 flex-1 divide-y divide-white/[0.07] overflow-y-auto">
             {data.attacks.map((attack, index) => (
               <li
                 key={`${attack.originCountryName}-${attack.targetCountryName}-${index}`}
@@ -155,7 +155,7 @@ export default function Sider({
         )}
       </section>
 
-      <p className="text-xs text-slate-500">
+      <p className="shrink-0 text-xs text-slate-500">
         {data
           ? `Updated ${new Date(data.updatedAt).toLocaleTimeString()} · refreshes every 5 minutes`
           : "Data refreshes every 5 minutes"}

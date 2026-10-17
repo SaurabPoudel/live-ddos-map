@@ -46,7 +46,7 @@ type LiveGlobeProps = {
 
 export default function LiveGlobe({ arcs, loading, error }: LiveGlobeProps) {
   return (
-    <section className="relative flex min-h-[min(72vh,760px)] w-full items-center justify-center">
+    <section className="relative flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden">
       {loading && (
         <p className="absolute z-10 rounded-full border border-white/10 bg-slate-950/80 px-4 py-2 text-sm text-slate-300">
           Loading attack statistics...
@@ -59,7 +59,7 @@ export default function LiveGlobe({ arcs, loading, error }: LiveGlobeProps) {
         </p>
       )}
 
-      <div className="relative mx-auto aspect-square w-full max-w-[min(90vw,760px)]">
+      <div className="relative mx-auto aspect-square w-[min(90vw,38vh,760px)] max-h-full max-w-full lg:w-[min(50vw,70vh,760px)]">
         <World globeConfig={globeConfig} data={arcs} />
       </div>
     </section>
